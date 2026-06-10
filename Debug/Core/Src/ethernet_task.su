@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:1938:34:__NVIC_SystemReset	4	static,ignoring_inline_asm
+../Core/Src/ethernet_task.c:68:13:ETH_BusyDelay_ms	24	static,ignoring_inline_asm
+../Core/Src/ethernet_task.c:87:6:ETH_PowerUp	8	static
+../Core/Src/ethernet_task.c:130:6:ETH_PowerDown	8	static
+../Core/Src/ethernet_task.c:161:6:System_SafeReset	8	static
+../Core/Src/ethernet_task.c:171:6:Ethernet_Task_Init	4	static
+../Core/Src/ethernet_task.c:176:6:Ethernet_Task_Run	24	static

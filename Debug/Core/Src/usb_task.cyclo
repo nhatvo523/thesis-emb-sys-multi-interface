@@ -1,0 +1,7 @@
+../Core/Src/usb_task.c:72:13:log_usb	4
+../Core/Src/usb_task.c:101:13:fmt_binary8	2
+../Core/Src/usb_task.c:115:13:log_ip_event	2
+../Core/Src/usb_task.c:169:13:log_modbus_event	4
+../Core/Src/usb_task.c:219:13:log_io_event	2
+../Core/Src/usb_task.c:251:6:USB_Task_Init	1
+../Core/Src/usb_task.c:256:6:USB_Task_Run	4

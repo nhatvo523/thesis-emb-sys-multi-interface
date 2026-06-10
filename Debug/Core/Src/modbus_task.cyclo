@@ -1,0 +1,6 @@
+../Core/Src/modbus_task.c:104:17:Modbus_CRC16	4
+../Core/Src/modbus_task.c:131:17:build_fc03_request	1
+../Core/Src/modbus_task.c:172:13:poll_one_slave	13
+../Core/Src/modbus_task.c:323:6:Modbus_UART_IdleCallback	3
+../Core/Src/modbus_task.c:338:6:Modbus_Task_Init	1
+../Core/Src/modbus_task.c:344:6:Modbus_Task_Run	2

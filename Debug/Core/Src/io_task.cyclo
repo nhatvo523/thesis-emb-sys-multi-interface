@@ -1,0 +1,5 @@
+../Core/Src/io_task.c:97:16:sample_di	3
+../Core/Src/io_task.c:115:13:apply_relay	2
+../Core/Src/io_task.c:130:16:relay_mask_from_coils	4
+../Core/Src/io_task.c:151:6:IO_Task_Init	1
+../Core/Src/io_task.c:157:6:IO_Task_Run	13

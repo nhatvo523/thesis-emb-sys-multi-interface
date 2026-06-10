@@ -1,0 +1,67 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flash & Run (Release)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "stlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/Release/datn.elf",
+            "preLaunchTask": "Build Release",
+            "device": "STM32F407VE",
+            "interface": "swd",
+            "preLaunchCommands": [
+                "set charset ASCII",
+                "set target-charset ASCII",
+                "set print sevenbit-strings on"
+            ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "stlinkPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.400.202601091506/tools/bin/ST-LINK_gdbserver.exe",
+            "armToolchainPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin"
+        },
+        {
+            "name": "Flash & Debug (Release)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "stlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/Release/datn.elf",
+            "preLaunchTask": "Build Release",
+            "device": "STM32F407VE",
+            "interface": "swd",
+            "preLaunchCommands": [
+                "set charset ASCII",
+                "set target-charset ASCII",
+                "set print sevenbit-strings on"
+            ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "stlinkPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.400.202601091506/tools/bin/ST-LINK_gdbserver.exe",
+            "armToolchainPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin",
+            "svdFile": ""
+        },
+        {
+            "name": "Flash & Debug (Debug build)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "stlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/Debug/datn.elf",
+            "preLaunchTask": "Build Debug",
+            "device": "STM32F407VE",
+            "interface": "swd",
+            "preLaunchCommands": [
+                "set charset ASCII",
+                "set target-charset ASCII",
+                "set print sevenbit-strings on"
+            ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "stlinkPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.400.202601091506/tools/bin/ST-LINK_gdbserver.exe",
+            "armToolchainPath": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin",
+            "svdFile": ""
+        }
+    ]
+}

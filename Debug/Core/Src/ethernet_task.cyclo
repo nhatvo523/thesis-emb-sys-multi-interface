@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:1938:34:__NVIC_SystemReset	1
+../Core/Src/ethernet_task.c:68:13:ETH_BusyDelay_ms	2
+../Core/Src/ethernet_task.c:87:6:ETH_PowerUp	1
+../Core/Src/ethernet_task.c:130:6:ETH_PowerDown	1
+../Core/Src/ethernet_task.c:161:6:System_SafeReset	0
+../Core/Src/ethernet_task.c:171:6:Ethernet_Task_Init	1
+../Core/Src/ethernet_task.c:176:6:Ethernet_Task_Run	8

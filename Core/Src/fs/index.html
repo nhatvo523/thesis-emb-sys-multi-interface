@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industrial Gateway</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #10131a;
+  color: #d4d8e2;
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+header {
+  background: #161b27;
+  border-bottom: 2px solid #2a3a5c;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #5bc8f5;
+  letter-spacing: 0.5px;
+}
+.hdr-meta { font-size: 0.72rem; color: #6a7a9a; }
+
+main { padding: 18px 20px; max-width: 1080px; margin: 0 auto; }
+
+#status-bar {
+  text-align: right;
+  font-size: 0.72rem;
+  color: #6a7a9a;
+  margin-bottom: 12px;
+}
+#status-bar strong { color: #3ecf8e; }
+
+.card {
+  background: #161b27;
+  border: 1px solid #2a3a5c;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+.card-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #5bc8f5;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a3a5c;
+}
+
+.slave-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.slave-panel {
+  background: #1c2236;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.slave-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.slave-hdr h3 { font-size: 0.88rem; font-weight: 600; color: #a8c4e0; }
+.conn-lbl {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: #2a3a5c;
+  color: #6a7a9a;
+}
+.conn-lbl.on  { background: #153a23; color: #3ecf8e; }
+.conn-lbl.off { background: #3a151c; color: #e05270; }
+
+.reg-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.reg-table th {
+  background: #10131a;
+  color: #6a7a9a;
+  font-weight: 600;
+  padding: 5px 8px;
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.reg-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #1c2236;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #e0e8ff;
+}
+.reg-table tr:last-child td { border-bottom: none; }
+.reg-table td:first-child { color: #6a7a9a; font-size: 0.72rem; }
+.reg-table td:last-child { font-weight: 600; min-width: 60px; }
+
+.io-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.io-chan {
+  background: #1c2236;
+  border-radius: 6px;
+  padding: 12px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.io-chan-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #6a7a9a;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.io-chan-val {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d4d8e2;
+  min-height: 1.1em;
+}
+
+.relay-btns { display: flex; gap: 5px; margin-top: 2px; }
+.btn {
+  padding: 3px 11px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.78; }
+.btn-on  { background: #206a3e; color: #6ef4a8; border: 1px solid #3ecf8e; }
+.btn-off { background: #5a1a24; color: #f47c8a; border: 1px solid #e05270; }
+.btn:active { transform: scale(0.96); }
+
+.dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot.on  { background: #3ecf8e; box-shadow: 0 0 7px #3ecf8e88; }
+.dot.off { background: #3a3f52; }
+
+@media (max-width: 640px) {
+  .slave-grid { grid-template-columns: 1fr; }
+  .io-grid    { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>&#9632; Industrial Gateway Dashboard</h1>
+  <div class="hdr-meta">STM32F407 &bull; FreeRTOS &bull; LwIP 2.1.2 &bull; Modbus RTU</div>
+</header>
+
+<main>
+
+  <div id="status-bar">
+    Last update: <strong id="last-update">&#8212;</strong>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Modbus Holding Registers</div>
+    <div class="slave-grid">
+      <div class="slave-panel">
+        <div class="slave-hdr">
+          <span id="s1ok" class="dot off"></span>
+          <h3>Slave 1</h3>
+          <span id="s1ok-lbl" class="conn-lbl off">Offline</span>
+        </div>
+        <table class="reg-table">
+          <tr><th>Register</th><th>Value (dec)</th></tr>
+          <tr><td>HR0</td><td id="s1r0">--</td></tr>
+          <tr><td>HR1</td><td id="s1r1">--</td></tr>
+          <tr><td>HR2</td><td id="s1r2">--</td></tr>
+          <tr><td>HR3</td><td id="s1r3">--</td></tr>
+          <tr><td>HR4</td><td id="s1r4">--</td></tr>
+          <tr><td>HR5</td><td id="s1r5">--</td></tr>
+          <tr><td>HR6</td><td id="s1r6">--</td></tr>
+          <tr><td>HR7</td><td id="s1r7">--</td></tr>
+        </table>
+      </div>
+
+      <div class="slave-panel">
+        <div class="slave-hdr">
+          <span id="s2ok" class="dot off"></span>
+          <h3>Slave 2</h3>
+          <span id="s2ok-lbl" class="conn-lbl off">Offline</span>
+        </div>
+        <table class="reg-table">
+          <tr><th>Register</th><th>Value (dec)</th></tr>
+          <tr><td>HR0</td><td id="s2r0">--</td></tr>
+          <tr><td>HR1</td><td id="s2r1">--</td></tr>
+          <tr><td>HR2</td><td id="s2r2">--</td></tr>
+          <tr><td>HR3</td><td id="s2r3">--</td></tr>
+          <tr><td>HR4</td><td id="s2r4">--</td></tr>
+          <tr><td>HR5</td><td id="s2r5">--</td></tr>
+          <tr><td>HR6</td><td id="s2r6">--</td></tr>
+          <tr><td>HR7</td><td id="s2r7">--</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Digital Inputs (DI)</div>
+    <div class="io-grid">
+      <div class="io-chan">
+        <span class="io-chan-lbl">DI 0</span>
+        <span id="di0" class="dot off"></span>
+        <span id="dit0" class="io-chan-val">LOW</span>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">DI 1</span>
+        <span id="di1" class="dot off"></span>
+        <span id="dit1" class="io-chan-val">LOW</span>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">DI 2</span>
+        <span id="di2" class="dot off"></span>
+        <span id="dit2" class="io-chan-val">LOW</span>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">DI 3</span>
+        <span id="di3" class="dot off"></span>
+        <span id="dit3" class="io-chan-val">LOW</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Relay Outputs (RL)</div>
+    <div class="io-grid">
+      <div class="io-chan">
+        <span class="io-chan-lbl">Relay 0</span>
+        <span id="rl0" class="dot off"></span>
+        <span id="rlt0" class="io-chan-val">OFF</span>
+        <div class="relay-btns">
+          <button class="btn btn-on" onclick="setRelay(0,1)">ON</button>
+          <button class="btn btn-off" onclick="setRelay(0,0)">OFF</button>
+        </div>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">Relay 1</span>
+        <span id="rl1" class="dot off"></span>
+        <span id="rlt1" class="io-chan-val">OFF</span>
+        <div class="relay-btns">
+          <button class="btn btn-on" onclick="setRelay(1,1)">ON</button>
+          <button class="btn btn-off" onclick="setRelay(1,0)">OFF</button>
+        </div>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">Relay 2</span>
+        <span id="rl2" class="dot off"></span>
+        <span id="rlt2" class="io-chan-val">OFF</span>
+        <div class="relay-btns">
+          <button class="btn btn-on" onclick="setRelay(2,1)">ON</button>
+          <button class="btn btn-off" onclick="setRelay(2,0)">OFF</button>
+        </div>
+      </div>
+      <div class="io-chan">
+        <span class="io-chan-lbl">Relay 3</span>
+        <span id="rl3" class="dot off"></span>
+        <span id="rlt3" class="io-chan-val">OFF</span>
+        <div class="relay-btns">
+          <button class="btn btn-on" onclick="setRelay(3,1)">ON</button>
+          <button class="btn btn-off" onclick="setRelay(3,0)">OFF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function applyStatus(d) {
+  var i;
+
+  for (i = 0; i < 8; i++) {
+    document.getElementById('s1r' + i).textContent = d.s1.r[i];
+    document.getElementById('s2r' + i).textContent = d.s2.r[i];
+  }
+
+  var s1Lbl = document.getElementById('s1ok-lbl');
+  var s2Lbl = document.getElementById('s2ok-lbl');
+  document.getElementById('s1ok').className = 'dot ' + (d.s1.ok ? 'on' : 'off');
+  s1Lbl.textContent = d.s1.ok ? 'Connected' : 'Offline';
+  s1Lbl.className = 'conn-lbl ' + (d.s1.ok ? 'on' : 'off');
+  document.getElementById('s2ok').className = 'dot ' + (d.s2.ok ? 'on' : 'off');
+  s2Lbl.textContent = d.s2.ok ? 'Connected' : 'Offline';
+  s2Lbl.className = 'conn-lbl ' + (d.s2.ok ? 'on' : 'off');
+
+  for (i = 0; i < 4; i++) {
+    document.getElementById('di' + i).className = 'dot ' + (d.di[i] ? 'on' : 'off');
+    document.getElementById('dit' + i).textContent = d.di[i] ? 'HIGH' : 'LOW';
+  }
+
+  for (i = 0; i < 4; i++) {
+    document.getElementById('rl' + i).className = 'dot ' + (d.rl[i] ? 'on' : 'off');
+    document.getElementById('rlt' + i).textContent = d.rl[i] ? 'ON' : 'OFF';
+  }
+
+  var now = new Date();
+  document.getElementById('last-update').textContent =
+    now.toLocaleTimeString() + ' (' + now.getMilliseconds() + ' ms)';
+}
+
+function fetchStatus() {
+  return fetch('/status.json', { cache: 'no-store' })
+    .then(function (r) {
+      if (!r.ok) {
+        throw new Error('HTTP ' + r.status);
+      }
+      return r.json();
+    })
+    .then(function (d) {
+      applyStatus(d);
+    })
+    .catch(function () {
+      document.getElementById('last-update').textContent = 'HTTP polling failed';
+    });
+}
+
+fetchStatus();
+setInterval(fetchStatus, 1000);
+
+function setRelay(idx, val) {
+  fetch('/relay.cgi?r=' + idx + '&v=' + val)
+    .then(function (r) { return r.json(); })
+    .then(function (d) { applyStatus(d); })
+    .catch(function () { });
+}
+</script>
+
+</body>
+</html>

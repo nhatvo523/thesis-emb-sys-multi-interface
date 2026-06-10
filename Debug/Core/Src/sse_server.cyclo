@@ -1,0 +1,9 @@
+../Core/Src/sse_server.c:77:12:build_sse_frame	5
+../Core/Src/sse_server.c:135:13:client_slot_clear	3
+../Core/Src/sse_server.c:158:13:sse_err_cb	1
+../Core/Src/sse_server.c:175:14:sse_recv_cb	2
+../Core/Src/sse_server.c:205:14:sse_accept_cb	7
+../Core/Src/sse_server.c:264:13:sse_do_push	5
+../Core/Src/sse_server.c:311:13:sse_server_setup	4
+../Core/Src/sse_server.c:344:6:SSE_Server_Init	1
+../Core/Src/sse_server.c:350:6:SSE_Push_Snapshot	2

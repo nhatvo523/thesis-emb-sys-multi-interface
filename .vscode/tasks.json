@@ -1,0 +1,102 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.cmake.win32_1.1.101.202603101401/tools/bin/cmake.exe",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build/Debug",
+                "--config", "Debug",
+                "--",
+                "-j4"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.cmake.win32_1.1.101.202603101401/tools/bin/cmake.exe",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build/Release",
+                "--config", "Release",
+                "--",
+                "-j4"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Flash Debug (ST-Link)",
+            "type": "shell",
+            "command": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.2.400.202601091506/tools/bin/STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "${workspaceFolder}/build/Debug/datn.elf",
+                "-v",
+                "-rst"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Flash (ST-Link)",
+            "type": "shell",
+            "command": "C:/ST/STM32CubeIDE_2.1.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.2.400.202601091506/tools/bin/STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "${workspaceFolder}/build/Release/datn.elf",
+                "-v",
+                "-rst"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build & Flash (ST-Link)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build Release",
+                "Flash (ST-Link)"
+            ],
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build & Flash Debug (ST-Link)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build Debug",
+                "Flash Debug (ST-Link)"
+            ],
+            "group": "none",
+            "problemMatcher": []
+        }
+    ]
+}
